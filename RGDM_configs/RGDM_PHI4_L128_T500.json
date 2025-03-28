@@ -1,0 +1,36 @@
+{
+    "ch": 128,
+    "ch_mult": [
+        1,
+        2,
+        2,
+        2
+    ],
+    "attn": [
+        1
+    ],
+    "num_res_blocks": 2,
+    "dropout": 0.1,
+    "beta_1": 0.0001,
+    "beta_T": 0.02,
+    "T": 500,
+    "lr": 0.0002,
+    "grad_clip": 1.0,
+    "total_steps": 1000001,
+    "img_size": 128,
+    "warmup": 5000,
+    "batch_size": 32,
+    "num_workers": 4,
+    "ema_decay": 0.9999,
+    "parallel": false,
+    "logdir": "./logs/RGDM_PHI4_L128_T500",
+    "sample_size": 16,
+    "sample_step": 10000,
+    "save_step": 25000,
+    "eval_step": 0,
+    "num_images": 100000,
+    "m0": 1,
+    "mL": 0.15,
+    "k_cutoff": 0.15,
+    "dataset_key": "phi4"
+}
