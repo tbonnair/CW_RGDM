@@ -1,0 +1,10 @@
+logs/RGDM_PHI4_T500/generated/*
+logs/RGDM_PHI4_T500/sample/*
+logs/RGDM_PHI4_T500/tensorboard/*
+logs/RGDM_PHI4_T500/ckpt/*
+logs/*
+sample/*
+data/*
+__pycache__/*
+tmp_src/*
+*.txt
