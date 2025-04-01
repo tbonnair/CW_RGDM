@@ -50,7 +50,7 @@ def show(imgs):
 in_chan = 1     # To be put in flags
 log_path = 'logs/RGDM_CW32_T500/'
 ckpt_path = '{:s}/ckpt/ckpt_24.pt'.format(log_path)
-num_images = 10000
+num_images = 100
 
 # read logdir/saved_config.json
 config_path = log_path + '/saved_config.json'
@@ -112,10 +112,7 @@ with torch.no_grad():
 # Show and save a batch of input images
 grid = make_grid(images[0:16], 4, padding=1)
 fig = show(grid)
-fig.savefig(log_path + '/generated/training.pdf', bbox_inches='tight')
 
 # Show and save a batch of generated images
 grid = make_grid(torch.clip(x_gen, images.min(), images.max())[0:16], 4, padding=1)
 fig = show(grid)
-fig.savefig(log_path + '/generated/{:s}_gen.pdf'.format(ckpt_path[-9:-3]),
-            bbox_inches='tight')
