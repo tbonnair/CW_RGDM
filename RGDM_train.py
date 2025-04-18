@@ -81,7 +81,7 @@ def train():
         in_chan=in_chan)
     
     # === TB250324: Added DataParallel ===
-    net_model = torch.nn.DataParallel(net_model, device_ids = [0, 1])
+    # net_model = torch.nn.DataParallel(net_model, device_ids = [0, 1])
     net_model.to(device)
     # ====================================
     

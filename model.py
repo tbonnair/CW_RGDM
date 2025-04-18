@@ -6,6 +6,10 @@ from torch.nn import init
 from torch.nn import functional as F
 
 
+# MODS:
+# 250318 - TB: added in_chan parameter to Unet
+# 250417 - TB: changed padding mode to 'replicate'
+
 class Swish(nn.Module):
     def forward(self, x):
         return x * torch.sigmoid(x)
@@ -46,7 +50,8 @@ class TimeEmbedding(nn.Module):
 class DownSample(nn.Module):
     def __init__(self, in_ch):
         super().__init__()
-        self.main = nn.Conv2d(in_ch, in_ch, 3, stride=2, padding=1)
+        self.main = nn.Conv2d(in_ch, in_ch, 3, stride=2, padding=1,
+                              padding_mode='reflect')
         self.initialize()
 
     def initialize(self):
@@ -61,7 +66,8 @@ class DownSample(nn.Module):
 class UpSample(nn.Module):
     def __init__(self, in_ch):
         super().__init__()
-        self.main = nn.Conv2d(in_ch, in_ch, 3, stride=1, padding=1)
+        self.main = nn.Conv2d(in_ch, in_ch, 3, stride=1, padding=1,
+                              padding_mode='reflect')
         self.initialize()
 
     def initialize(self):
@@ -120,7 +126,8 @@ class ResBlock(nn.Module):
         self.block1 = nn.Sequential(
             nn.GroupNorm(32, in_ch),
             Swish(),
-            nn.Conv2d(in_ch, out_ch, 3, stride=1, padding=1),
+            nn.Conv2d(in_ch, out_ch, 3, stride=1, padding=1,
+                              padding_mode='reflect'),
         )
         self.temb_proj = nn.Sequential(
             Swish(),
@@ -130,7 +137,8 @@ class ResBlock(nn.Module):
             nn.GroupNorm(32, out_ch),
             Swish(),
             nn.Dropout(dropout),
-            nn.Conv2d(out_ch, out_ch, 3, stride=1, padding=1),
+            nn.Conv2d(out_ch, out_ch, 3, stride=1, padding=1,
+                              padding_mode='reflect'),
         )
         if in_ch != out_ch:
             self.shortcut = nn.Conv2d(in_ch, out_ch, 1, stride=1, padding=0)
@@ -166,7 +174,8 @@ class UNet(nn.Module):
         tdim = ch * 4
         self.time_embedding = TimeEmbedding(T, ch, tdim)
 
-        self.head = nn.Conv2d(in_chan, ch, kernel_size=3, stride=1, padding=1)  # TB250318: added in_chan
+        self.head = nn.Conv2d(in_chan, ch, kernel_size=3, stride=1, padding=1,
+                              padding_mode='reflect')  # TB250318: added in_chan
         self.downblocks = nn.ModuleList()
         chs = [ch]  # record output channel when dowmsample for upsample
         now_ch = ch
@@ -202,7 +211,8 @@ class UNet(nn.Module):
         self.tail = nn.Sequential(
             nn.GroupNorm(32, now_ch),
             Swish(),
-            nn.Conv2d(now_ch, in_chan, 3, stride=1, padding=1)    # TB250318: go back to in_chan
+            nn.Conv2d(now_ch, in_chan, 3, stride=1, padding=1,
+                              padding_mode='reflect')    # TB250318: go back to in_chan
         )
         self.initialize()
 
